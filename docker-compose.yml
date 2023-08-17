@@ -15,7 +15,7 @@ services:
     environment:
       SERVER_NAME: localhost
     ports:
-      - 80:80
+      - 8081:80
     networks:
       - nginx
     depends_on:
@@ -23,13 +23,12 @@ services:
   python:
     build: ./python
     volumes:
-      - /app:/app
+      - /home/eduardo/Documentos/Front_Monitor-Deslizamento-Solo:/app
     environment:
-      DJANGO_SUPERUSER_USERNAME: 'admin'
-      DJANGO_SUPERUSER_EMAIL: 'admin@example.com'
-      DJANGO_SUPERUSER_PASSWORD: 'password'
-      DJANGO_SUPERUSER_NAME: 'admin'     
-      DJANGO_SECRET_KEY: 'custom-secret-key' 
+      DJANGO_SUPERUSER_USERNAME: "admin"
+      DJANGO_SUPERUSER_EMAIL: "admin@example.com"
+      DJANGO_SUPERUSER_PASSWORD: "password"
+      DJANGO_SUPERUSER_NAME: "admin"     
     networks:
       - db
       - nginx
