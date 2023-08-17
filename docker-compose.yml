@@ -1,0 +1,48 @@
+version: "3"
+
+networks:
+  db:
+  nginx:
+
+volumes:
+  db_data:
+
+services:
+  nginx:
+    image: nginx:1.25.2
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    environment:
+      SERVER_NAME: localhost
+    ports:
+      - 80:80
+    networks:
+      - nginx
+    depends_on:
+      - python
+  python:
+    build: ./python
+    volumes:
+      - /app:/app
+    environment:
+      DJANGO_SUPERUSER_USERNAME: 'admin'
+      DJANGO_SUPERUSER_EMAIL: 'admin@example.com'
+      DJANGO_SUPERUSER_PASSWORD: 'password'
+      DJANGO_SUPERUSER_NAME: 'admin'     
+      DJANGO_SECRET_KEY: 'custom-secret-key' 
+    networks:
+      - db
+      - nginx
+    depends_on:
+      - mariadb
+  mariadb:
+    image: mariadb:11.0.3
+    environment:
+      MYSQL_DATABASE: tcc
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - db
